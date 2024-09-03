@@ -1,4 +1,7 @@
-import React from 'react'
+import React from 'react';
+import { BorwserRouter,link,route,Routes} from 'react-router-dom';
+import { logo } from './assets';
+import {home,creatpost} from './pages';
 
 const App = () => {
   return (
