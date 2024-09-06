@@ -1,7 +1,3 @@
-import home from './home';
-import creatpost from './creatpost';
 
-export {
-    home,
-    creatpost,
-}
+export { default as Home } from './Home.jsx';
+export { default as CreatePost } from './CreatePost.jsx';  // Ensure this export exists
