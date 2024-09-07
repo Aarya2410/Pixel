@@ -1,60 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import FormField from '../components/FormField.jsx';
+import Card from '../components/Card.jsx';
+import Loader from '../components/loader.jsx';
+
+const RenderCards = ({ data, title }) => {
+  if (data?.length > 0) {
+    return data.map((post) => (
+      <Card
+        key={post.id}
+        {...post}
+        className="transform transition duration-500 hover:scale-105 hover:shadow-xl"
+      />
+    ));
+  }
+
+  return (
+    <h2 className="mt-5 font-bold text-[#6449ff] text-2xl uppercase text-center">
+      {title}
+    </h2>
+  );
+};
 
 const Home = () => {
+  const [loading, setLoading] = useState(false);
+  const [allPosts, setAllPosts] = useState(null);
+  const [searchText, setSearchText] = useState('');
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-600 text-white">
-      {/* Header Section */}
-      <header className="w-full py-10">
-        <h1 className="text-5xl md:text-7xl font-extrabold text-center tracking-wider animate-fadeIn">
-          AI Image Generator
+    <section className="max-w-7xl mx-auto px-5 py-12 bg-gradient-to-r from-[#f3f4f6] to-[#ffffff]">
+      <div className="text-center mb-12">
+        <h1 className="font-extrabold text-[#222328] text-[40px] leading-tight">
+          The Community Showcase
         </h1>
-        <p className="text-center mt-4 text-xl md:text-3xl opacity-80 animate-fadeIn delay-500">
-          Unleash your imagination with AI-powered visuals
+        <p className="mt-4 text-[#666e75] text-[16px] max-w-[600px] mx-auto">
+          Discover and be inspired by a collection of imaginative and visually stunning AI-generated images.
         </p>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="w-full flex-1 flex flex-col items-center justify-center px-4">
-        <div className="bg-white text-gray-900 rounded-2xl shadow-2xl p-8 md:p-12 max-w-xl w-full text-center transition-all duration-300 hover:scale-105 hover:shadow-3xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-indigo-600">
-            Ready to Create Stunning Images?
-          </h2>
-          <p className="mb-8 text-lg md:text-xl text-gray-600">
-            Describe your idea below and let the magic happen!
-          </p>
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Describe your image idea..."
-              className="w-full py-3 px-6 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-4 focus:ring-purple-300 transition duration-200"
-            />
-            <button className="absolute top-0 right-0 mt-2 mr-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-pink-500 hover:to-purple-600 text-white py-2 px-6 rounded-lg transition duration-300 transform hover:scale-105">
-              Generate
-            </button>
+      <div className="mb-12">
+        <FormField
+          name="search"
+          placeholder="Search for AI-generated images..."
+          value={searchText}
+          handleChange={(e) => setSearchText(e.target.value)}
+          className="bg-white border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6449ff] w-full"
+        />
+      </div>
+
+      <div>
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <Loader />
           </div>
-        </div>
-      </main>
-
-      {/* Call to Action Section */}
-      <section className="mt-16 w-full px-4">
-        <div className="bg-purple-600 bg-opacity-80 text-white rounded-lg p-6 md:p-10 shadow-xl max-w-3xl mx-auto text-center transition-all duration-300 hover:bg-opacity-100">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">
-            Transform Words Into Art Instantly
-          </h3>
-          <p className="mb-6 text-lg">
-            Let AI take your creativity to new heights. Start generating now!
-          </p>
-          <button className="bg-white text-purple-600 font-semibold py-3 px-8 rounded-lg transition duration-300 hover:bg-purple-700 hover:text-white">
-            Get Started
-          </button>
-        </div>
-      </section>
-
-      {/* Footer Section */}
-      <footer className="w-full py-8 text-center text-sm opacity-80">
-        <p>&copy; 2024 AI Image Generator. All rights reserved.</p>
-      </footer>
-    </div>
+        ) : (
+          <>
+            {searchText && (
+              <h2 className="font-medium text-[#666e75] text-xl mb-3 text-center">
+                Showing results for{' '}
+                <span className="text-[#222328] font-semibold">{searchText}</span>
+              </h2>
+            )}
+            <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
+              {searchText ? (
+                <RenderCards data={[]} title="No search results found" />
+              ) : (
+                <RenderCards data={allPosts} title="No posts found" />
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 
