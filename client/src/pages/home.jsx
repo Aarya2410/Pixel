@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Card from '../components/Card.jsx';
 import Loader from '../components/loader.jsx';
 import FormField from '../components/FormField.jsx';
+import { Button } from '@/components/ui/button.jsx';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
 
 
 const RenderCards = ({ data, title }) => {
@@ -37,6 +39,7 @@ const Home = () => {
           Discover and be inspired by a collection of imaginative and visually stunning AI-generated images.
         </p>
       </div>
+
 
       <div className="mb-12">
         <FormField
