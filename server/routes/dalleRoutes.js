@@ -22,13 +22,21 @@ router.route('/').post(async (req, res) => {
 
         // Generate the image from OpenAI API
         const aiResponse = await openai.images.generate({
+            model: "dall-e-3",
             prompt,
             n: 1,
             size: '1024x1024',
             response_format: 'b64_json' // Ensure this is correct
         });
+        image_url = aiResponse.data[0].url;
 
-        const image = aiResponse.data[0].b64_json; // Adjust this access point
+        const image = aiResponse.data[0].b64_json; 
+        res.status(200).json({
+            success: true,
+            message: 'Image generated successfully!',
+            photo: image
+        });
+        // Adjust this access point
         res.status(200).json({ photo: image });
 
     } catch (error) {

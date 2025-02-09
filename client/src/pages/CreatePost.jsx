@@ -10,37 +10,46 @@ const CreatePost = () => {
   const [form, setForm] = useState({
     name: '',
     prompt: '',
-    photo: '', // This will store the generated image URL
+    photo: '', 
   });
 
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const generateImage = async() => {
-     if(form.prompt){
+  const generateImage = async () => {
+    if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('http://localhost:8080/api/v1/dalle',{
+        const response = await fetch('http://localhost:8080/api/v1/dalle', {
           method: 'POST',
           headers: {
-            'content-type': 'application/json',
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({prompt : form.prompt}),
-        })
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
 
         const data = await response.json();
-        console.log(data);
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}`})
+        console.log("Image Response is : " , data);
+        if (data.success) {
+          // Log the success message to confirm API is working
+          console.log(data.message); // This will print 'Image generated successfully!'
+
+          // Set the image to form.photo
+          setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+        } else {
+          console.log('Error generating image.');
+        }
 
       } catch (error) {
         alert(error);
-      }finally{
-        setGeneratingImg(false); 
+      } finally {
+        setGeneratingImg(false);
       }
-     }else{
-      alert('Please enter a prompt')
-     }
-  }
+    } else {
+      alert('Please enter a prompt');
+    }
+  };
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -55,23 +64,23 @@ const CreatePost = () => {
     e.preventDefault();
     if (form.prompt) {
       setGeneratingImg(true);
+      await generateImage()
       // Simulate API call to generate image (you can replace this with actual API call)
-      setTimeout(() => {
-        const generatedImageUrl = 'https://example.com/generated_image.jpg'; // Replace with actual generated image URL
-        setForm({ ...form, photo: generatedImageUrl });
-        setGeneratingImg(false);
-      }, 2000); // Simulated delay for image generation
+      // setTimeout(() => {
+      //   const generatedImageUrl = 'https://example.com/generated_image.jpg'; // Replace with actual generated image URL
+      //   setForm({ ...form, photo: generatedImageUrl });
+      //   setGeneratingImg(false);
+      // }, 2000); 
     }
   };
 
   const handleShare = async () => {
     if (form.photo && form.prompt && form.name) {
       setLoading(true);
-      // Simulate API call to share the post (replace with actual logic)
       setTimeout(() => {
         alert('Image shared with the community!');
         setLoading(false);
-        navigate('/'); // Redirect to the home page after sharing
+        navigate('/'); 
       }, 1500);
     } else {
       alert('Please generate an image and fill out all the fields before sharing.');
